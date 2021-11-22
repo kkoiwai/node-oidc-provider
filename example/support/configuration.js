@@ -6,6 +6,12 @@ module.exports = {
     //   grant_types: ['refresh_token', 'authorization_code'],
     //   redirect_uris: ['http://sso-client.dev/providers/7/open_id', 'http://sso-client.dev/providers/8/open_id'],
     // }
+    {
+      client_id: 'oidcCLIENT',
+      client_secret: '...',
+      grant_types: ['refresh_token', 'authorization_code'],
+      redirect_uris: ['http://localhost:3000/'],
+    }
   ],
   interactions: {
     url(ctx, interaction) { // eslint-disable-line no-unused-vars
@@ -21,12 +27,29 @@ module.exports = {
     phone: ['phone_number', 'phone_number_verified'],
     profile: ['birthdate', 'family_name', 'gender', 'given_name', 'locale', 'middle_name', 'name',
       'nickname', 'picture', 'preferred_username', 'profile', 'updated_at', 'website', 'zoneinfo'],
+    verified_claims: null,
   },
   features: {
-    devInteractions: { enabled: false }, // defaults to true
+    devInteractions: { enabled: true }, // defaults to true
 
     deviceFlow: { enabled: true }, // defaults to false
     revocation: { enabled: true }, // defaults to false
+
+    claimsParameter: { enabled: true },
+
+    verifiedClaims: {
+      enabled: true,
+      trust_frameworks_supported: ["ja_aml", "de_aml"],
+      evidence_supported: ["document"],
+      documents_supported: ["passport"],
+      documents_methods_supported: [""], // OPTIONAL
+      documents_validation_methods_supported: [""],// OPTIONAL
+      documents_verification_methods_supported: [""],// OPTIONAL
+      electronic_records_supported: false,
+      claims_in_verified_claims_supported: ['birthdate', 'family_name', 'gender', 'given_name', 'locale', 'middle_name'],
+      attachments_supported: false,
+      // digest_algorithms_supported : "", only when attachments_supported is true
+    },
   },
   jwks: {
     keys: [
