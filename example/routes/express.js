@@ -52,6 +52,8 @@ module.exports = (app, provider) => {
 
       const client = await provider.Client.find(params.client_id);
 
+      console.log("[DEBUG] espress.js interaction called" + prompt.name);
+
       switch (prompt.name) {
         case 'login': {
           return res.render('login', {
@@ -132,6 +134,9 @@ module.exports = (app, provider) => {
       }
       if (details.missingOIDCClaims) {
         grant.addOIDCClaims(details.missingOIDCClaims);
+      }
+      if (details.missingOIDCVerifiedClaims) {
+        grant.addOIDCVerifiedClaims(details.missingOIDCVerifiedClaims);
       }
       if (details.missingResourceScopes) {
         // eslint-disable-next-line no-restricted-syntax

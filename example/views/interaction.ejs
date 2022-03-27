@@ -27,6 +27,12 @@
   </ul>
 <% } %>
 
+<% missingOIDCVerifiedClaims = details.missingOIDCVerifiedClaims; %>
+<% if (missingOIDCVerifiedClaims) { %>
+  <li>verified claims:</li>
+    <pre><%= JSON.stringify(missingOIDCVerifiedClaims,null,2) %></pre>
+<% } %>
+
 <% missingResourceScopes = details.missingResourceScopes %>
 <% if (missingResourceScopes) { %>
   <% for (const [indicator, scopes] of Object.entries(details.missingResourceScopes)) { %>
