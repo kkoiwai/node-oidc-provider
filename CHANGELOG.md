@@ -2,6 +2,69 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.10.6](https://github.com/panva/node-oidc-provider/compare/v7.10.5...v7.10.6) (2022-01-07)
+
+
+### Fixes
+
+* substr > slice change in mountPath should have been substring ([adc0d63](https://github.com/panva/node-oidc-provider/commit/adc0d63193c131d7a45f83e4195360a62ef2c522))
+
+## [7.10.5](https://github.com/panva/node-oidc-provider/compare/v7.10.4...v7.10.5) (2022-01-04)
+
+
+### Fixes
+
+* **resourceIndicators:** await the result of useGrantedResource ([#1173](https://github.com/panva/node-oidc-provider/issues/1173)) ([64a8028](https://github.com/panva/node-oidc-provider/commit/64a802884dc4b990847cda4eacb3dba619ae379d))
+
+## [7.10.4](https://github.com/panva/node-oidc-provider/compare/v7.10.3...v7.10.4) (2021-12-05)
+
+
+### Fixes
+
+* add iss to error responses when issAuthResp is enabled ([05ac3a8](https://github.com/panva/node-oidc-provider/commit/05ac3a8cc51f18d33e17982b81f1996e6a327e8c))
+
+## [7.10.3](https://github.com/panva/node-oidc-provider/compare/v7.10.2...v7.10.3) (2021-12-04)
+
+
+### Fixes
+
+* expose invalid_dpop_proof error code and set it to 401 on userinfo ([2628d7e](https://github.com/panva/node-oidc-provider/commit/2628d7e4b81d22a3972e8f82c94b9ec4dd9835d4))
+
+## [7.10.2](https://github.com/panva/node-oidc-provider/compare/v7.10.1...v7.10.2) (2021-11-28)
+
+
+### Fixes
+
+* use paseto configuration from `getResourceServerInfo` ([#1150](https://github.com/panva/node-oidc-provider/issues/1150)) ([02c821d](https://github.com/panva/node-oidc-provider/commit/02c821d7f16c6421d30ffc449366d4d79d951830))
+
+## [7.10.1](https://github.com/panva/node-oidc-provider/compare/v7.10.0...v7.10.1) (2021-11-16)
+
+
+### Fixes
+
+* clearly mark that multiple pop mechanisms are not allowed ([49eed4c](https://github.com/panva/node-oidc-provider/commit/49eed4c20b28ef95e7a1a6315783dd3956b8c84a))
+
+## [7.10.0](https://github.com/panva/node-oidc-provider/compare/v7.9.0...v7.10.0) (2021-11-04)
+
+
+### Features
+
+* duplicate iss and aud as JWE Header Parameters ([b26ea44](https://github.com/panva/node-oidc-provider/commit/b26ea4465b3e45b8e63e69bd08c5de525494dea8))
+
+## [7.9.0](https://github.com/panva/node-oidc-provider/compare/v7.8.1...v7.9.0) (2021-10-26)
+
+
+### Features
+
+* add LTS Gallium as a supported runtime version ([19b4d0d](https://github.com/panva/node-oidc-provider/commit/19b4d0daa4ca1e05acd2b5651545251fe937ff39))
+
+## [7.8.1](https://github.com/panva/node-oidc-provider/compare/v7.8.0...v7.8.1) (2021-10-12)
+
+
+### Bug Fixes
+
+* use insufficient_scope instead of invalid_scope at userinfo_endpoint ([ba8a8f0](https://github.com/panva/node-oidc-provider/commit/ba8a8f0188c9a73a0ab0f8b974bea49feb2a87a6))
+
 ## [7.8.0](https://github.com/panva/node-oidc-provider/compare/v7.7.0...v7.8.0) (2021-09-15)
 
 

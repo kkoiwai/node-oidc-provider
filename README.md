@@ -46,7 +46,7 @@ The following draft specifications are implemented by oidc-provider:
 - [JWT Response for OAuth Token Introspection - draft 10][jwt-introspection]
 - [JWT Secured Authorization Response Mode for OAuth 2.0 (JARM) - Implementer's Draft 01][jarm]
 - [Financial-grade API: Client Initiated Backchannel Authentication Profile (FAPI-CIBA) - Implementer's Draft 01][fapi-ciba]
-- [OAuth 2.0 Authorization Server Issuer Identifier in Authorization Response - draft 01][iss-auth-resp]
+- [OAuth 2.0 Authorization Server Issuer Identifier in Authorization Response - draft 04][iss-auth-resp]
 - [OAuth 2.0 Demonstration of Proof-of-Possession at the Application Layer (DPoP) - draft 03][dpop]
 - [OpenID Connect Back-Channel Logout 1.0 - draft 06][backchannel-logout]
 - [OpenID Connect RP-Initiated Logout 1.0 - draft 01][rpinitiated-logout]
@@ -70,7 +70,7 @@ conforms to the following profiles of the OpenID Connect™ protocol
 
 ## Sponsor
 
-[<img width="65" height="65" align="left" src="https://avatars.githubusercontent.com/u/2824157?s=75&v=4" alt="auth0-logo">][sponsor-auth0] If you want to quickly add OpenID Connect authentication to Node.js apps, feel free to check out Auth0's Node.js SDK and free plan at [auth0.com/developers][sponsor-auth0].<br><br>
+[<img height="65" align="left" src="https://cdn.auth0.com/blog/github-sponsorships/brand-evolution-logo-Auth0-horizontal-Indigo.png" alt="auth0-logo">][sponsor-auth0] If you want to quickly add OpenID Connect authentication to Node.js apps, feel free to check out Auth0's Node.js SDK and free plan. [Create an Auth0 account; it's free!][sponsor-auth0]<br><br>
 
 ## Support
 
@@ -137,17 +137,17 @@ actions and i.e. emit metrics that react to specific triggers. See the list of a
 [jar]: https://www.rfc-editor.org/rfc/rfc9101.html
 [device-flow]: https://tools.ietf.org/html/rfc8628
 [jwt-introspection]: https://tools.ietf.org/html/draft-ietf-oauth-jwt-introspection-response-10
-[sponsor-auth0]: https://auth0.com/developers?utm_source=GHsponsor&utm_medium=GHsponsor&utm_campaign=oidc-provider&utm_content=auth
+[sponsor-auth0]: https://a0.to/try-auth0
 [mtls]: https://tools.ietf.org/html/rfc8705
 [dpop]: https://tools.ietf.org/html/draft-ietf-oauth-dpop-03
 [resource-indicators]: https://tools.ietf.org/html/rfc8707
 [jarm]: https://openid.net/specs/openid-financial-api-jarm-ID1.html
-[jwt-at]: https://tools.ietf.org/html/draft-ietf-oauth-access-token-jwt-11
+[jwt-at]: https://www.rfc-editor.org/rfc/rfc9068.html
 [paseto-at]: https://paseto.io
 [support-sponsor]: https://github.com/sponsors/panva
 [par]: https://www.rfc-editor.org/rfc/rfc9126.html
 [rpinitiated-logout]: https://openid.net/specs/openid-connect-rpinitiated-1_0-01.html
-[iss-auth-resp]: https://tools.ietf.org/html/draft-ietf-oauth-iss-auth-resp-01
+[iss-auth-resp]: https://tools.ietf.org/html/draft-ietf-oauth-iss-auth-resp-04
 [fapi]: https://openid.net/specs/openid-financial-api-part-2-1_0.html
 [ciba]: https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0-final.html
 [fapi-ciba]: https://openid.net/specs/openid-financial-api-ciba-ID1.html
