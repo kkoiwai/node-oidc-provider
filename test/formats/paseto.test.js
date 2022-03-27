@@ -8,15 +8,16 @@ const sinon = require('sinon').createSandbox();
 const { expect } = require('chai');
 
 let paseto;
-const above16 = process.version.substr(1).split('.').map((x) => parseInt(x, 10))[0] >= 16;
+const above16 = parseInt(process.versions.node, 10) >= 16;
 if (above16) {
   // eslint-disable-next-line
   paseto = require('paseto3');
 } else {
   // eslint-disable-next-line
-  paseto = require('paseto2');
+  paseto = require('paseto');
 }
 
+const ResourceServer = require('../../lib/helpers/resource_server');
 const epochTime = require('../../lib/helpers/epoch_time');
 const bootstrap = require('../test_helper');
 
@@ -24,6 +25,11 @@ const generateKeyPair = util.promisify(crypto.generateKeyPair);
 
 describe('paseto format', () => {
   before(bootstrap(__dirname));
+
+  afterEach(function () {
+    this.provider.removeAllListeners();
+  });
+
   const accountId = 'account';
   const claims = {};
   const clientId = 'client';
@@ -54,14 +60,14 @@ describe('paseto format', () => {
   const iiat = epochTime();
   const rotations = 1;
   const extra = { foo: 'bar' };
-  const resourceServer = {
+  const resourceServer = new ResourceServer(resource, {
     accessTokenFormat: 'paseto',
     audience: 'foo',
     paseto: {
       version: 1,
       purpose: 'public',
     },
-  };
+  });
 
   /* eslint-disable object-property-newline */
   const fullPayload = {
@@ -76,14 +82,14 @@ describe('paseto format', () => {
 
   describe('Resource Server Configuration', () => {
     it('v1.public', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: {
           version: 1,
           purpose: 'public',
         },
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -91,14 +97,14 @@ describe('paseto format', () => {
     });
 
     it('v2.public', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: {
           version: 2,
           purpose: 'public',
         },
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -107,14 +113,14 @@ describe('paseto format', () => {
 
     if (above16) {
       it('v3.public', async function () {
-        const resourceServer = {
+        const resourceServer = new ResourceServer(resource, {
           accessTokenFormat: 'paseto',
           audience: 'foo',
           paseto: {
             version: 3,
             purpose: 'public',
           },
-        };
+        });
 
         const client = await this.provider.Client.find(clientId);
         const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -124,14 +130,14 @@ describe('paseto format', () => {
 
     if (above16) {
       it('v4.public', async function () {
-        const resourceServer = {
+        const resourceServer = new ResourceServer(resource, {
           accessTokenFormat: 'paseto',
           audience: 'foo',
           paseto: {
             version: 4,
             purpose: 'public',
           },
-        };
+        });
 
         const client = await this.provider.Client.find(clientId);
         const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -140,7 +146,7 @@ describe('paseto format', () => {
     }
 
     it('v1.local', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: {
@@ -148,7 +154,7 @@ describe('paseto format', () => {
           purpose: 'local',
           key: crypto.randomBytes(32),
         },
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -156,7 +162,7 @@ describe('paseto format', () => {
     });
 
     it('v1.local (keyObject)', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: {
@@ -164,7 +170,7 @@ describe('paseto format', () => {
           purpose: 'local',
           key: crypto.createSecretKey(crypto.randomBytes(32)),
         },
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -173,7 +179,7 @@ describe('paseto format', () => {
 
     if (above16) {
       it('v3.local', async function () {
-        const resourceServer = {
+        const resourceServer = new ResourceServer(resource, {
           accessTokenFormat: 'paseto',
           audience: 'foo',
           paseto: {
@@ -181,7 +187,7 @@ describe('paseto format', () => {
             purpose: 'local',
             key: crypto.randomBytes(32),
           },
-        };
+        });
 
         const client = await this.provider.Client.find(clientId);
         const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -189,7 +195,7 @@ describe('paseto format', () => {
       });
 
       it('v3.local (keyObject)', async function () {
-        const resourceServer = {
+        const resourceServer = new ResourceServer(resource, {
           accessTokenFormat: 'paseto',
           audience: 'foo',
           paseto: {
@@ -197,7 +203,7 @@ describe('paseto format', () => {
             purpose: 'local',
             key: crypto.createSecretKey(crypto.randomBytes(32)),
           },
-        };
+        });
 
         const client = await this.provider.Client.find(clientId);
         const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -206,7 +212,7 @@ describe('paseto format', () => {
     }
 
     it('public kid selection failing', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: {
@@ -214,7 +220,7 @@ describe('paseto format', () => {
           version: 1,
           purpose: 'public',
         },
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -226,7 +232,7 @@ describe('paseto format', () => {
     });
 
     it('kid must be a string', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: {
@@ -235,7 +241,7 @@ describe('paseto format', () => {
           purpose: 'local',
           key: crypto.randomBytes(32),
         },
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -247,14 +253,14 @@ describe('paseto format', () => {
     });
 
     it('unsupported PASETO version and purpose', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: {
           version: 2,
           purpose: 'local',
         },
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -266,14 +272,14 @@ describe('paseto format', () => {
     });
 
     it('local paseto requires a key', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: {
           version: 1,
           purpose: 'local',
         },
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -285,7 +291,7 @@ describe('paseto format', () => {
     });
 
     it('local paseto requires a key 32 bytes', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: {
@@ -293,7 +299,7 @@ describe('paseto format', () => {
           purpose: 'local',
           key: crypto.randomBytes(16),
         },
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -305,7 +311,7 @@ describe('paseto format', () => {
     });
 
     it('local paseto requires a secret key (private provided)', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: {
@@ -313,7 +319,7 @@ describe('paseto format', () => {
           purpose: 'local',
           key: await (await generateKeyPair('ed25519')).privateKey,
         },
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -325,7 +331,7 @@ describe('paseto format', () => {
     });
 
     it('local paseto requires a secret key (public provided)', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: {
@@ -333,7 +339,7 @@ describe('paseto format', () => {
           purpose: 'local',
           key: await (await generateKeyPair('ed25519')).publicKey,
         },
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -345,10 +351,10 @@ describe('paseto format', () => {
     });
 
     it('missing paseto configuration', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -361,14 +367,14 @@ describe('paseto format', () => {
 
     if (!above16) {
       it('only >= 16.0.0 node supports v3 and v4', async function () {
-        const resourceServer = {
+        const resourceServer = new ResourceServer(resource, {
           accessTokenFormat: 'paseto',
           audience: 'foo',
           paseto: {
             version: 3,
             purpose: 'public',
           },
-        };
+        });
 
         const client = await this.provider.Client.find(clientId);
         const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });
@@ -381,11 +387,11 @@ describe('paseto format', () => {
     }
 
     it('invalid paseto configuration type', async function () {
-      const resourceServer = {
+      const resourceServer = new ResourceServer(resource, {
         accessTokenFormat: 'paseto',
         audience: 'foo',
         paseto: null,
-      };
+      });
 
       const client = await this.provider.Client.find(clientId);
       const token = new this.provider.AccessToken({ client, ...fullPayload, resourceServer });

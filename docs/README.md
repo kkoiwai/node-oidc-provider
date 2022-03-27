@@ -1147,7 +1147,7 @@ async function introspectionAllowedPolicy(ctx, client, token) {
 
 ### features.issAuthResp
 
-[draft-ietf-oauth-iss-auth-resp-01](https://tools.ietf.org/html/draft-ietf-oauth-iss-auth-resp-01) - OAuth 2.0 Authorization Server Issuer Identifier in Authorization Response  
+[draft-ietf-oauth-iss-auth-resp-04](https://tools.ietf.org/html/draft-ietf-oauth-iss-auth-resp-04) - OAuth 2.0 Authorization Server Issuer Identifier in Authorization Response  
 
 Enables `iss` authorization response parameter for responses without existing countermeasures against mix-up attacks.   
   
@@ -1436,8 +1436,8 @@ new (provider.InitialAccessToken)({}).save().then(console.log);
 #### issueRegistrationAccessToken
 
 Boolean or a function used to decide whether a registration access token will be issued or not. Supported values are
- - `false` registration access tokens is issued
- - `true` registration access tokens is not issued
+ - `true` registration access tokens is issued
+ - `false` registration access tokens is not issued
  - function returning true/false, true when token should be issued, false when it shouldn't   
   
 
@@ -1719,11 +1719,8 @@ async function getResourceServerInfo(ctx, resourceIndicator, client) {
   throw new errors.InvalidTarget();
 }
 ```
-<a id="get-resource-server-info-resource-server-api-with-two-scopes-an-expected-audience-value-an-access-token-ttl"></a><details><summary>(Click to expand) Resource Server (API) with two scopes, an expected audience value, an Access Token TTL</summary><br>
-
-
-and a JWT Access Token Format.
-  
+<a id="get-resource-server-info-resource-server-api-with-two-scopes-an-expected-audience-value-an-access-token-ttl-and-a-jwt-access-token-format"></a><details><summary>(Click to expand) Resource Server (API) with two scopes, an expected audience value, an Access Token TTL and a JWT Access Token Format.
+</summary><br>
 
 ```js
 {
@@ -1813,6 +1810,7 @@ and a JWT Access Token Format.
     }
   }
   // PASETO Access Token Format (when accessTokenFormat is 'paseto')
+  // Note: v2.local and v4.local are NOT supported
   paseto?: {
     version: 1 | 2 | 3 | 4,
     purpose: 'local' | 'public',

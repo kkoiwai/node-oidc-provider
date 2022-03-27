@@ -222,6 +222,13 @@ module.exports = function testHelper(dir, {
           },
         });
 
+        Object.defineProperty(this, 'validateIss', {
+          value: (response) => {
+            const { query: { iss } } = parse(response.headers.location, true);
+            expect(iss).to.equal(issuerIdentifier);
+          },
+        });
+
         Object.defineProperty(this, 'validateInteractionRedirect', {
           value: (response) => {
             const { hostname, search, query } = parse(response.headers.location);
@@ -452,11 +459,11 @@ module.exports = function testHelper(dir, {
         await app.register(middie);
         app.use(mountTo, provider.callback());
         await new Promise((resolve) => global.server.close(resolve));
-        await app.listen(port);
+        await app.listen(port, '::');
         global.server = app.server;
         afterPromises.push(async () => {
           await app.close();
-          global.server = createServer().listen(port);
+          global.server = createServer().listen(port, '::');
           await new Promise((resolve) => global.server.once('listening', resolve));
         });
         break;
@@ -489,7 +496,7 @@ module.exports = function testHelper(dir, {
         global.server = app.listener;
         afterPromises.push(async () => {
           await app.stop();
-          global.server = createServer().listen(port);
+          global.server = createServer().listen(port, '::');
           await new Promise((resolve) => global.server.once('listening', resolve));
         });
         break;

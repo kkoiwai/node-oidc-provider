@@ -8,7 +8,7 @@ const { promisify } = require('util');
 
 const jose = require('jose2');
 const helmet = require('helmet');
-const pem = require('https-pem');
+const selfsigned = require('selfsigned').generate();
 
 const { Provider, errors } = require('../../lib'); // require('oidc-provider');
 
@@ -124,6 +124,7 @@ const fapi = new Provider(ISSUER, {
       enabled: true,
       profile: process.env.PROFILE ? process.env.PROFILE : '1.0 Final',
     },
+    issAuthResp: { enabled: true },
     mTLS: {
       enabled: true,
       certificateBoundAccessTokens: true,
@@ -183,7 +184,14 @@ fapi.interactionResult = function patchedInteractionResult(...args) {
 
 function uuid(e){return e?(e^randomBytes(1)[0]%16>>e/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,uuid)} // eslint-disable-line
 
-const pHelmet = promisify(helmet());
+const directives = helmet.contentSecurityPolicy.getDefaultDirectives();
+delete directives['form-action'];
+const pHelmet = promisify(helmet({
+  contentSecurityPolicy: {
+    useDefaults: false,
+    directives,
+  },
+}));
 
 fapi.use(async (ctx, next) => {
   if (ctx.path === '/ciba-sim') {
@@ -270,7 +278,8 @@ if (SUITE_BASE_URL === OFFICIAL_CERTIFICATION) {
   const server = https.createServer({
     requestCert: true,
     rejectUnauthorized: false,
-    ...pem,
+    key: selfsigned.private,
+    cert: selfsigned.cert,
   }, fapi.callback());
 
   server.listen(PORT, () => {

@@ -1,9 +1,13 @@
 /* eslint-disable no-await-in-loop */
 const { strict: assert } = require('assert');
 const { createWriteStream } = require('fs');
+const stream = require('stream');
+const { promisify } = require('util');
 
 const Got = require('got');
 const ms = require('ms');
+
+const pipeline = promisify(stream.pipeline);
 
 const debug = require('./debug');
 
@@ -27,7 +31,10 @@ class API {
       timeout: 10000,
     });
 
-    const { stream } = Got.extend({
+    this.get = get;
+    this.post = post;
+
+    this.stream = Got.extend({
       prefixUrl: baseUrl,
       throwHttpErrors: false,
       followRedirect: false,
@@ -36,11 +43,7 @@ class API {
         'content-type': 'application/json',
       },
       retry: 0,
-    });
-
-    this.get = get;
-    this.stream = stream;
-    this.post = post;
+    }).stream;
   }
 
   async getAllTestModules() {
@@ -109,19 +112,14 @@ class API {
 
   async downloadArtifact({ planId } = {}) {
     assert(planId, 'argument property "planId" missing');
-    await new Promise((resolve) => {
-      const download = this.stream(`api/plan/exporthtml/${planId}`, {
+    const filename = `export-${planId}.zip`;
+    return pipeline(
+      this.stream(`api/plan/exporthtml/${planId}`, {
         headers: { accept: 'application/zip' },
         responseType: 'buffer',
-      });
-
-      const filename = `export-${planId}.zip`;
-      download.pipe(createWriteStream(filename));
-      download.on('close', () => {
-        console.log(`Logs in ${filename}.`); // eslint-disable-line no-console
-        resolve();
-      });
-    });
+      }),
+      createWriteStream(filename),
+    );
   }
 
   async waitForState({ moduleId, timeout = ms('4m') } = {}) {

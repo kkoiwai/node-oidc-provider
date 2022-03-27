@@ -50,6 +50,7 @@ module.exports = {
       attachments_supported: false,
       // digest_algorithms_supported : "", only when attachments_supported is true
     },
+    issAuthResp: { enabled: true }, // defaults to false
   },
   jwks: {
     keys: [
