@@ -10,7 +10,19 @@ module.exports = {
       client_id: 'oidcCLIENT',
       client_secret: '...',
       grant_types: ['refresh_token', 'authorization_code'],
-      redirect_uris: ['http://localhost:3000/'],
+      redirect_uris: ['http://localhost:3333/', 'http://localhost:3030/', 'http://localhost:3000/'],
+      token_endpoint_auth_method: 'self_signed_tls_client_auth',
+      jwks: {
+        "keys": [
+          {
+            "kty": "RSA",
+            "e": "AQAB",
+            "kid": "834a643a-1430-4f21-9b14-653f44c9aea3",
+            "n": "xdNPJDsTQc8Dv9_RSbqX9J0wYeQrciz2w-DGk9kq-1971clr1dItrNWRGe-fzUUwolnjofTgDzGbbkNIp15qck2hL7WX-x0EhYhE3KErgartU-um5G_LfbvYKStAyDcixchxlKlarLnusa_lBi6fX40CPZ6gzXtPLCeBr1co7Vk",
+            "x5t#S256": "q-tsGLznMHH6OrweSQ_E50TU4mfspTkBDt7NEtEUDFw",
+          }
+        ]
+      },
     }
   ],
   interactions: {
@@ -51,7 +63,28 @@ module.exports = {
       // digest_algorithms_supported : "", only when attachments_supported is true
     },
     issAuthResp: { enabled: true }, // defaults to false
+
+    // enable mtls
+    mTLS: {
+      enabled: true,
+      selfSignedTlsClientAuth: true,
+      getCertificate(ctx) {
+        // return ctx.get('x-ssl-client-cert');
+        // return ctx.req.socket.getPeerCertificate(true);
+        //https://github.com/nodejs/node-v0.x-archive/issues/8882#issuecomment-299318722
+        var pem = '-----BEGIN CERTIFICATE-----\n' + ctx.req.socket.getPeerCertificate(true).raw.toString('base64') + '\n-----END CERTIFICATE-----';
+        return pem;
+      },
+    },
   },
+  tokenEndpointAuthMethods: [
+    'none',
+    'client_secret_basic',
+    'client_secret_jwt',
+    'client_secret_post',
+    'private_key_jwt',
+    'self_signed_tls_client_auth',
+  ],
   jwks: {
     keys: [
       {

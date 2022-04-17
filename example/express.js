@@ -17,6 +17,17 @@ configuration.findAccount = Account.findAccount;
 
 const app = express();
 
+// HTTPSサーバー起動                                                                               
+var fs = require('fs');
+var https = require('https');
+var options = {
+  key: fs.readFileSync('./example/privkey1.pem'),
+  cert: fs.readFileSync('./example/fullchain1.pem'),
+  requestCert: true,
+  rejectUnauthorized: false,
+};
+var httpsserver = https.createServer(options, app);
+
 const directives = helmet.contentSecurityPolicy.getDefaultDirectives();
 delete directives['form-action'];
 app.use(helmet({
@@ -65,7 +76,8 @@ let server;
 
   routes(app, provider);
   app.use(provider.callback());
-  server = app.listen(PORT, () => {
+  // server = app.listen(PORT, () => {
+  server = httpsserver.listen(PORT, () => {
     console.log(`application is listening on port ${PORT}, check its /.well-known/openid-configuration`);
   });
 })().catch((err) => {
