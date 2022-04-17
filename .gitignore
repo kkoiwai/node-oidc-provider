@@ -48,3 +48,4 @@ types/*.js
 
 *.DS_Store
 .vscode
+example/*.pem
